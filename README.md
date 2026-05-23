@@ -1,36 +1,36 @@
 # pebble-todo
 
-A Pebble watchapp/watchface written in C using the Pebble SDK.
+A todo list watchapp for Pebble watches. Add tasks by voice, mark them done, and delete them — all from your wrist. Tasks persist across app launches.
+
+## Features
+
+- **Voice input** — press select on "+ Add task" to dictate a new task via the Pebble microphone
+- **Strikethrough** — completed tasks are crossed out in the list
+- **Action menu** — select any task to toggle done/undone or delete it
+- **Persistent storage** — up to 32 tasks survive app restarts
 
 ## Building & running
 
 ```sh
-pebble build                          # build for all targetPlatforms
-pebble install --emulator emery       # install on the emery emulator
-pebble install --phone <ip>           # install to a paired phone
+pebble build                        # compile for all target platforms
+pebble install --emulator emery     # run on the Pebble Time 2 emulator
+pebble install --phone <ip>         # sideload to a paired phone
+pebble logs --emulator emery        # stream log output
 ```
 
-## Target platforms
+## CI
 
-`targetPlatforms` in `package.json` controls which watches you build for. The
-modern Pebble hardware is **emery** (Pebble Time 2), **gabbro** (Pebble Round
-2), and **flint** (Pebble 2 Duo); the original Pebble platforms (aplite,
-basalt, chalk, diorite) are included by default for backwards compatibility.
+Every pull request is built automatically via GitHub Actions. See `.github/workflows/build.yml`.
 
-## Project layout
+## SDK setup
 
-```
-src/c/           C source for the watchapp
-src/pkjs/        PebbleKit JS (phone-side) source, if any
-worker_src/c/    Background worker source, if any
-resources/       Images, fonts, and other bundled resources
-package.json     Project metadata (UUID, platforms, resources, message keys)
-wscript          Build rules — usually no need to edit
+Install `uv`, then:
+
+```sh
+uv tool install pebble-tool --python 3.13
+pebble sdk install latest
 ```
 
-By default this project is configured as a watchapp. To make it a watchface,
-set `pebble.watchapp.watchface` to `true` in `package.json`.
+Ubuntu dependencies: `libsdl2-2.0-0 libglib2.0-0 libpixman-1-0 zlib1g libsndio7.0`
 
-## Documentation
-
-Full SDK docs, tutorials, and API reference: <https://developer.repebble.com>
+Full SDK docs: <https://developer.repebble.com>
